@@ -14,6 +14,27 @@ import Vision
 
 class ViewController: UIViewController, ARSCNViewDelegate {
 
+    
+    @IBAction func tagObject(_ sender: UIButton) {
+        // HIT TEST : REAL WORLD
+        // Get Screen Centre
+        let screenCentre : CGPoint = CGPoint(x: self.sceneView.bounds.midX, y: self.sceneView.bounds.midY)
+
+        let arHitTestResults : [ARHitTestResult] = sceneView.hitTest(screenCentre, types: [.featurePoint]) // Alternatively, we could use '.existingPlaneUsingExtent' for more grounded hit-test-points.
+
+        if let closestResult = arHitTestResults.first {
+            // Get Coordinates of HitTest
+            let transform : matrix_float4x4 = closestResult.worldTransform
+            let worldCoord : SCNVector3 = SCNVector3Make(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
+
+            // Create 3D Text
+            let node : SCNNode = createNewBubbleParentNode(latestPrediction)
+            sceneView.scene.rootNode.addChildNode(node)
+            node.position = worldCoord
+        }
+    }
+    
+    
     // SCENE
     @IBOutlet var sceneView: ARSCNView!
     let bubbleDepth : Float = 0.01 // the 'depth' of 3D text
@@ -44,8 +65,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         //////////////////////////////////////////////////
         // Tap Gesture Recognizer
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(gestureRecognize:)))
-        view.addGestureRecognizer(tapGesture)
+//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(gestureRecognize:)))
+//        view.addGestureRecognizer(tapGesture)
         
         //////////////////////////////////////////////////
         
@@ -100,26 +121,56 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         return true
     }
     
+    
+//    @objc func handleTap(gestureRecognize: UITapGestureRecognizer) {
+//
+//
+//
+//        // HIT TEST : REAL WORLD
+//        // Get Screen Centre
+//        let screenCentre : CGPoint = CGPoint(x: self.sceneView.bounds.midX, y: self.sceneView.bounds.midY)
+//
+//        let arHitTestResults : [ARHitTestResult] = sceneView.hitTest(screenCentre, types: [.featurePoint]) // Alternatively, we could use '.existingPlaneUsingExtent' for more grounded hit-test-points.
+//
+//        if let closestResult = arHitTestResults.first {
+//            // Get Coordinates of HitTest
+//            let transform : matrix_float4x4 = closestResult.worldTransform
+//            let worldCoord : SCNVector3 = SCNVector3Make(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
+//
+//            // Create 3D Text
+//            let node : SCNNode = createNewBubbleParentNode(latestPrediction)
+//            sceneView.scene.rootNode.addChildNode(node)
+//            node.position = worldCoord
+//        }
+//    }
+
+    
+    
     // MARK: - Interaction
     
-    @objc func handleTap(gestureRecognize: UITapGestureRecognizer) {
-        // HIT TEST : REAL WORLD
-        // Get Screen Centre
-        let screenCentre : CGPoint = CGPoint(x: self.sceneView.bounds.midX, y: self.sceneView.bounds.midY)
-        
-        let arHitTestResults : [ARHitTestResult] = sceneView.hitTest(screenCentre, types: [.featurePoint]) // Alternatively, we could use '.existingPlaneUsingExtent' for more grounded hit-test-points.
-        
-        if let closestResult = arHitTestResults.first {
-            // Get Coordinates of HitTest
-            let transform : matrix_float4x4 = closestResult.worldTransform
-            let worldCoord : SCNVector3 = SCNVector3Make(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
-            
-            // Create 3D Text
-            let node : SCNNode = createNewBubbleParentNode(latestPrediction)
-            sceneView.scene.rootNode.addChildNode(node)
-            node.position = worldCoord
-        }
-    }
+//    @objc func handleTap(gestureRecognize: UITapGestureRecognizer) {
+//
+//
+////        print(gestureRecognize.location(in: view))
+//
+//
+//        // HIT TEST : REAL WORLD
+//        // Get Screen Centre
+//        let screenCentre : CGPoint = CGPoint(x: self.sceneView.bounds.midX, y: self.sceneView.bounds.midY)
+//
+//        let arHitTestResults : [ARHitTestResult] = sceneView.hitTest(screenCentre, types: [.featurePoint]) // Alternatively, we could use '.existingPlaneUsingExtent' for more grounded hit-test-points.
+//
+//        if let closestResult = arHitTestResults.first {
+//            // Get Coordinates of HitTest
+//            let transform : matrix_float4x4 = closestResult.worldTransform
+//            let worldCoord : SCNVector3 = SCNVector3Make(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
+//
+//            // Create 3D Text
+//            let node : SCNNode = createNewBubbleParentNode(latestPrediction)
+//            sceneView.scene.rootNode.addChildNode(node)
+//            node.position = worldCoord
+//        }
+//    }
     
     func createNewBubbleParentNode(_ text : String) -> SCNNode {
         // Warning: Creating 3D Text is susceptible to crashing. To reduce chances of crashing; reduce number of polygons, letters, smoothness, etc.
@@ -197,8 +248,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         DispatchQueue.main.async {
             // Print Classifications
-            print(classifications)
-            print("--")
+//            print(classifications)
+//            print("--")
             
             // Display Debug Text on screen
             var debugText:String = ""
