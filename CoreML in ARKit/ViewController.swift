@@ -14,7 +14,7 @@ import Vision
 
 class ViewController: UIViewController, ARSCNViewDelegate {
 
-    
+    // TAG OBJECT WHEN CENTER BUTTON PRESS
     @IBAction func tagObject(_ sender: UIButton) {
         // HIT TEST : REAL WORLD
         // Get Screen Centre
