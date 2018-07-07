@@ -32,8 +32,60 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             sceneView.scene.rootNode.addChildNode(node)
             node.position = worldCoord
         }
+        
+        // Hackery starts
+        let myPost = Post(title: "Hello World", body: "How are you all today?")
+        submitPost(post: myPost)
+        // hackery ends
     }
-    
+    struct Post: Codable {
+        let title: String
+        let body: String
+    }
+    func submitPost(post: Post) {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = "1531613e.ngrok.io"
+        urlComponents.path = "/getQuote"
+        guard let url = urlComponents.url else { fatalError("Could not create URL from components") }
+        
+        // Specify this request as being a POST method
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        // Make sure that we include headers specifying that our request's HTTP body
+        // will be JSON encoded
+        var headers = request.allHTTPHeaderFields ?? [:]
+        headers["Content-Type"] = "application/json"
+        request.allHTTPHeaderFields = headers
+        
+        // Now let's encode out Post struct into JSON data...
+        let encoder = JSONEncoder()
+
+        let jsonData = try! encoder.encode(post)
+        // ... and set our request's HTTP body
+        request.httpBody = jsonData
+        print("jsonData: ", String(data: request.httpBody!, encoding: .utf8) ?? "no body data")
+
+        
+        // Create and run a URLSession data task with our JSON encoded POST request
+        let config = URLSessionConfiguration.default
+        let session = URLSession(configuration: config)
+        let task = session.dataTask(with: request) { (responseData, response, responseError) in
+            guard responseError == nil else {
+//                throw responseError
+                return
+            }
+            
+            // APIs usually respond with the data you just sent in your POST request
+            if let data = responseData, let utf8Representation = String(data: data, encoding: .utf8) {
+                print("response: ", utf8Representation)
+            } else {
+                print("no readable data received in response")
+            }
+        }
+        task.resume()
+    }
+    // hackery kinda actually ends here
     
     // SCENE
     @IBOutlet var sceneView: ARSCNView!
