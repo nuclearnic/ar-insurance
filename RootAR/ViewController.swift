@@ -1,11 +1,3 @@
-//
-//  ViewController.swift
-//  CoreML in ARKit
-//
-//  Created by Hanley Weng on 14/7/17.
-//  Copyright © 2017 CompanyName. All rights reserved.
-//
-
 import UIKit
 import SceneKit
 import ARKit
@@ -14,7 +6,7 @@ import Vision
 
 class ViewController: UIViewController, ARSCNViewDelegate {
 
-    // TAG OBJECT WHEN CENTER BUTTON PRESS
+    // TAG OBJECT WHEN CENTER BUTTON IS PRESSED
     @IBAction func tagObject(_ sender: UIButton) {
         // HIT TEST : REAL WORLD
         // Get Screen Centre
