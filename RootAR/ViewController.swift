@@ -25,6 +25,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             node.position = worldCoord
         }
         
+        print("STARTING HERE>>>>>")
+        let api = ApiController()
+        let string = api.returnString()
+        print(string)
+        print("ENDING HERE <<<<<<<")
+        
         // Hackery starts
         let myPost = Post(title: "Hello World", body: "How are you all today?")
         submitPost(post: myPost)
