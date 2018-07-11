@@ -1,6 +1,6 @@
 # RootAR
 
-## Instructions
+## Setup Instructions
 
 * Clone
 * Download the [inception v3 model](http://download.tensorflow.org/models/inception_v3_2016_08_28.tar.gz), and extract it to the `RootAR` folder.
@@ -9,4 +9,5 @@
 * Point to your server in `ApiController.swift`
 * Choose your iPhone as the device and click build and run.
 
-##
+## Example Server
+* There's a simple Sinatra example server to get started with [here.](https://github.com/nuclearnic/ar-insurance-server)
